@@ -1,0 +1,35 @@
+---
+version: "2.1"
+services:
+  seafile-db:
+    image: mariadb:10.5
+    container_name: seafile-db
+    environment:
+      - MYSQL_ROOT_PASSWORD=${SEAFILE_MYSQL_PASSWORD}
+      - MYSQL_LOG_CONSOLE=true
+    volumes:
+      - ${DOCKER_FOLDER}/seafile/db:/var/lib/mysql
+    restart: always
+
+  seafile-memcached:
+    image: memcached:1.5.6
+    container_name: seafile-memcached
+    entrypoint: memcached -m 256
+    restart: always
+
+  seafile:
+    image: seafileltd/seafile-mc:latest
+    container_name: seafile
+    ports:
+        - "8080:80"
+    volumes:
+      - ${DOCKER_FOLDER}/seafile/data:/shared
+    environment:
+      - DB_HOST=seafile-db
+      - DB_ROOT_PASSWD=${SEAFILE_MYSQL_PASSWORD}
+      - SEAFILE_ADMIN_EMAIL=denis@test.com
+      - SEAFILE_ADMIN_PASSWORD=${SEAFILE_ADMIN_PASSWORD}
+    depends_on:
+      - seafile-db
+      - seafile-memcached
+    restart: always
