@@ -27,7 +27,7 @@ services:
     environment:
       - DB_HOST=seafile-db
       - DB_ROOT_PASSWD=${SEAFILE_MYSQL_PASSWORD}
-      - SEAFILE_ADMIN_EMAIL=denis@test.com
+      - SEAFILE_ADMIN_EMAIL=${SEAFILE_ADMIN_EMAIL}
       - SEAFILE_ADMIN_PASSWORD=${SEAFILE_ADMIN_PASSWORD}
     depends_on:
       - seafile-db
