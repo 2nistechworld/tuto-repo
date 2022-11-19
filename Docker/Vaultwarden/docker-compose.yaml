@@ -1,0 +1,14 @@
+---
+version: "2.1"
+services:
+  vaultwarden:
+    image: vaultwarden/server:latest
+    container_name: vaultwarden
+    environment:
+      - SIGNUPS_ALLOWED=false
+      - DOMAIN=${VAULTWARDEN_DOMAIN}
+    volumes:
+      - ${DOCKER_FOLDER}/vaultwarden/data:/data/
+    ports:
+      - 80
+    restart: always
