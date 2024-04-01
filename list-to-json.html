@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>URLs to JSON Array</title>
+</head>
+<body>
+
+<h2>Paste URLs to Convert into JSON Array</h2>
+
+<form id="urlForm">
+  <textarea id="urlInput" rows="5" cols="50" placeholder="Paste URLs here"></textarea><br>
+  <button type="button" onclick="convertToJSON()">Convert to JSON</button>
+</form>
+
+<div id="jsonOutput"></div>
+
+<script>
+function convertToJSON() {
+  // Get the input value from textarea
+  const urlsInput = document.getElementById("urlInput").value;
+  
+  // Split the input into an array of URLs
+  const urlsArray = urlsInput.split("\n").map(url => url.trim()).filter(url => url !== "");
+  
+  // Create an object with redirect_uri key
+  const jsonObject = { "redirect_uri": urlsArray };
+  
+  // Convert the object into a JSON string
+  const jsonString = JSON.stringify(jsonObject, null, 2);
+  
+  // Display the JSON output
+  document.getElementById("jsonOutput").innerText = jsonString;
+}
+</script>
+
+</body>
+</html>
