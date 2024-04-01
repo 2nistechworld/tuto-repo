@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>JWT Decoder</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.3.1/styles/a11y-dark.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.3.1/highlight.min.js"></script>
+<style>
+  body {
+    font-family: Arial, sans-serif;
+    margin: 20px;
+    background-color: #121212;
+    color: #fff;
+  }
+  textarea {
+    width: 100%;
+    height: 200px;
+    margin-bottom: 10px;
+    padding: 10px;
+    box-sizing: border-box;
+    border: 1px solid #444;
+    border-radius: 4px;
+    font-size: 14px;
+    color: #fff;
+    background-color: #333;
+  }
+  button {
+    padding: 10px 20px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    cursor: pointer;
+    border-radius: 4px;
+  }
+  button:hover {
+    background-color: #45a049;
+  }
+  #decodedToken {
+    margin-top: 20px;
+    padding: 10px;
+    border: 1px solid #444;
+    border-radius: 4px;
+    font-size: 14px;
+    color: #fff;
+    background-color: #222;
+  }
+</style>
+</head>
+<body>
+  <h2>JWT Decoder</h2>
+  <textarea id="jwtInput" placeholder="Paste your JWT token here..."></textarea>
+  <button onclick="decodeJWT()">Decode</button>
+
+  <pre><code id="decodedToken" class="json"></code></pre>
+
+  <script>
+    function decodeJWT() {
+      var jwtInput = document.getElementById('jwtInput').value.trim();
+      if (!jwtInput) {
+        alert('Please enter a JWT token.');
+        return;
+      }
+
+      var jwtParts = jwtInput.split('.');
+      if (jwtParts.length !== 3) {
+        alert('Invalid JWT format. Please enter a valid JWT token.');
+        return;
+      }
+
+      try {
+        var decodedHeader = JSON.parse(atob(jwtParts[0]));
+        var decodedPayload = JSON.parse(atob(jwtParts[1]));
+        var signature = jwtParts[2];
+        
+        var decodedToken = {
+          header: decodedHeader,
+          payload: decodedPayload
+        };
+
+        if (signature) {
+          decodedToken.signature = "Token signed";
+        }
+
+        document.getElementById('decodedToken').textContent = JSON.stringify(decodedToken, null, 2);
+        hljs.highlightElement(document.getElementById('decodedToken'));
+      } catch (error) {
+        alert('Error decoding JWT token: ' + error.message);
+      }
+    }
+  </script>
+</body>
+</html>
