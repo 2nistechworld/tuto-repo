@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Display HTTP Headers</title>
+    <style>
+        body {
+            background-color: #222;
+            color: #eee;
+            font-family: Arial, sans-serif;
+        }
+        #headers {
+            margin: 20px;
+            padding: 20px;
+            background-color: #333;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+
+<div id="headers"></div>
+
+<script>
+    // Function to format headers
+    function formatHeaders(headersString) {
+        var headersArray = headersString.trim().split("\n");
+        var formattedHeaders = "";
+        for (var i = 0; i < headersArray.length; i++) {
+            var header = headersArray[i].split(":");
+            var headerName = header[0].trim();
+            var headerValue = header.slice(1).join(":").trim();
+            formattedHeaders += "<b>" + headerName + ":</b> " + headerValue + "<br>";
+        }
+        return formattedHeaders;
+    }
+
+    // Send an AJAX request to get headers
+    var xhr = new XMLHttpRequest();
+    xhr.open('HEAD', window.location.href);
+    xhr.onreadystatechange = function() {
+        if (xhr.readyState === XMLHttpRequest.DONE) {
+            if (xhr.status === 200) {
+                var headers = xhr.getAllResponseHeaders();
+                var formattedHeaders = formatHeaders(headers);
+                document.getElementById('headers').innerHTML = formattedHeaders;
+            } else {
+                document.getElementById('headers').innerText = "Failed to retrieve headers. Status code: " + xhr.status;
+            }
+        }
+    };
+    xhr.send();
+</script>
+
+</body>
+</html>
